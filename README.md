@@ -1,18 +1,9 @@
 # gamedev-fa2023-mp1
 CMSC391/COAR463 Game Development - Minor Project 1
 
-Great job on creating your own copy of the minor project 1 scaffold!
+Game title: Jerry's rat race,
 
-Be sure to review the resources on the Canvas site Week 6:
+Description: This little game showcases Jerry's race to get all the pieces of cheese to live, With the exciting setting of a common kitchen there are plenty of obstacles to block Jerry on his path to freedom. Using Unity's engine and C# scripts we created a little game where Jerry can dash around and pick up pieces of cheese, all while avoiding traps. 
 
-<https://virginiacommonwealth.instructure.com/courses/86151/modules>
-
-To learn more about writing good README.md files, see:
-
-<https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/>
-
-This is a scaffold project. I’ll be providing scaffolds throughout the
-semester to get you working faster, and to make grading much easier for
-the TA team.
-
-Good luck!
+Installation: to download this package copy the package and open the file using Unity 2021.3.10 and up
+then load sample scene and hit play.
