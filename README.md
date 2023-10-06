@@ -7,3 +7,7 @@ Description: This little game showcases Jerry's race to get all the pieces of ch
 
 Installation: to download this package copy the package and open the file using Unity 2021.3.10 and up
 then load sample scene and hit play.
+
+Credits:
+Tiffany Pham - lead artist/animator
+Matthew Xu - Coder/prefab-designer
