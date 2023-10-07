@@ -8,6 +8,12 @@ Description: This little game showcases Jerry's race to get all the pieces of ch
 Installation: to download this package copy the package and open the file using Unity 2021.3.8 and up
 then load sample scene and hit play.
 
+Possible bugs: during import of a version thats not 2021.3.8 you may recieve a bug where it says -
+An error occurred while resolving packages:
+  Project has invalid dependencies:
+    com.unity.feature.2d: Package [com.unity.feature.2d@2.0.0] cannot be found
+if so then open the manifest file under Jerry's Cheese Chase/Packages/manifest and change line 5 to "1.0.0"
+
 Credits:
 Tiffany Pham - lead artist/animator
 Matthew Xu - Coder/prefab-designer
