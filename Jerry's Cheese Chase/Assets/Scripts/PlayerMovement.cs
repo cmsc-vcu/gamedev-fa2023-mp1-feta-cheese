@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
     private float dashingPower = 75f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 1f;
+    private float coyoteTime = 0.2f;
+    private float coyoteTimeCounter;
 
     private bool doubleJump;
     private float doubleJumpingPower = 12f;
@@ -42,28 +44,40 @@ public class PlayerMovement : MonoBehaviour
 
         if(isDashing)
         {
+            Debug.Log("it got here");
             return;
         }
 
         horizontal = Input.GetAxisRaw("Horizontal");
 
+        if(IsGrounded())
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+            coyoteTimeCounter -= Time.deltaTime;
+
+        if(coyoteTimeCounter > 0f && Input.GetButtonDown("Jump"))
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+        }
         if (IsGrounded() && !Input.GetButton("Jump")){
             doubleJump = false;
         }
-
         if (Input.GetButtonDown("Jump"))
         {
             if(IsGrounded() || doubleJump)
             {
             rb.velocity = new Vector2(rb.velocity.x, doubleJump ? doubleJumpingPower : jumpingPower);
+            coyoteTimeCounter = 0f;
 
             doubleJump = !doubleJump;
             }
         }
 
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        if (Input.GetButtonDown("Jump") && rb.velocity.y > 0f)
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y);
         }
 
         if(Input.GetKeyDown(KeyCode.LeftShift) && canDash)
@@ -103,6 +117,7 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator Dash()
     {
+        animator.Play("Player_Dash");
         canDash = false;
         isDashing = true;
         float originalGravity = rb.gravityScale;
@@ -110,6 +125,7 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
         tr.emitting = true;
         yield return new WaitForSeconds(dashingTime);
+        animator.Play("Player_Idle");
         tr.emitting = false;
         rb.gravityScale = originalGravity;
         isDashing = false;
@@ -118,12 +134,22 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    private IEnumerator isDead()
+    {
+        Time.timeScale = 0;;
+        animator.Play("Player_Death");
+        yield return new WaitWhile(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+        animator.Play("Player_Idle");
+        Time.timeScale = 1; 
+        transform.position = respawnPoint;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
         if(collision.tag == "FallDetector")
         {
-            transform.position = respawnPoint;
+            StartCoroutine(isDead());
         }
 
         if(collision.tag =="Win")
