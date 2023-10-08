@@ -1,18 +1,19 @@
 # gamedev-fa2023-mp1
 CMSC391/COAR463 Game Development - Minor Project 1
 
-Great job on creating your own copy of the minor project 1 scaffold!
+Game title: Jerry's Cheese Chase,
 
-Be sure to review the resources on the Canvas site Week 6:
+Description: This little game showcases Jerry's race to get all the pieces of cheese to live, With the exciting setting of a common kitchen there are plenty of obstacles to block Jerry on his path to freedom. Using Unity's engine and C# scripts we created a little game where Jerry can dash around and pick up pieces of cheese, all while avoiding traps. 
 
-<https://virginiacommonwealth.instructure.com/courses/86151/modules>
+Installation: to download this package copy the package and open the file using Unity 2021.3.8 and up
+then load sample scene and hit play.
 
-To learn more about writing good README.md files, see:
+Possible bugs: during import of a version thats not 2021.3.8 you may recieve a bug where it says -
+An error occurred while resolving packages:
+  Project has invalid dependencies:
+    com.unity.feature.2d: Package [com.unity.feature.2d@2.0.0] cannot be found
+if so then open the manifest file under Jerry's Cheese Chase/Packages/manifest and change line 5 to "1.0.0"
 
-<https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/>
-
-This is a scaffold project. I’ll be providing scaffolds throughout the
-semester to get you working faster, and to make grading much easier for
-the TA team.
-
-Good luck!
+Credits:
+Tiffany Pham - lead artist/animator
+Matthew Xu - Coder/prefab-designer
