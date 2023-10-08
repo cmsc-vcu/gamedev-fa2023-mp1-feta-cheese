@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private float dashingCooldown = 1f;
     private float coyoteTime = 0.2f;
     private float coyoteTimeCounter;
+    private bool dead = false;
 
     private bool doubleJump;
     private float doubleJumpingPower = 12f;
@@ -25,8 +26,14 @@ public class PlayerMovement : MonoBehaviour
     public GameObject fallDetector;
 
     public Text winText;
+    public Text loseText;
 
     public Animator animator;
+    public GameObject lScreen;
+    public GameObject resetB;
+    public GameObject winScene;
+    public GameObject scoretxt;
+    public GameObject hearttxt;
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
@@ -35,6 +42,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        scoretxt.gameObject.SetActive(true);
+        hearttxt.gameObject.SetActive(true);
         respawnPoint = transform.position;
     }
 
@@ -42,9 +51,8 @@ public class PlayerMovement : MonoBehaviour
     {
         animator.SetFloat("Speed", Mathf.Abs(horizontal));
 
-        if(isDashing)
+        if(isDashing || dead)
         {
-            Debug.Log("it got here");
             return;
         }
 
@@ -52,10 +60,14 @@ public class PlayerMovement : MonoBehaviour
 
         if(IsGrounded())
         {
+            animator.Play("Player_Idle");
             coyoteTimeCounter = coyoteTime;
         }
         else
+        {
+            animator.Play("Player_Fly");
             coyoteTimeCounter -= Time.deltaTime;
+        }
 
         if(coyoteTimeCounter > 0f && Input.GetButtonDown("Jump"))
         {
@@ -125,7 +137,6 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
         tr.emitting = true;
         yield return new WaitForSeconds(dashingTime);
-        animator.Play("Player_Idle");
         tr.emitting = false;
         rb.gravityScale = originalGravity;
         isDashing = false;
@@ -136,12 +147,30 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator isDead()
     {
-        Time.timeScale = 0;;
+        dead = true;
+        Lives.heart -= 1;
+        Time.timeScale = 0;
         animator.Play("Player_Death");
+        if(Lives.heart == 0)
+        {
+            loseText.gameObject.SetActive(true);
+            lScreen.gameObject.SetActive(true);
+            gameover();
+        }
+        else
+        {
         yield return new WaitWhile(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
-        animator.Play("Player_Idle");
         Time.timeScale = 1; 
+        dead = false;
         transform.position = respawnPoint;
+        }
+    }
+
+    private void gameover()
+    {
+        resetB.gameObject.SetActive(true);
+        scoretxt.gameObject.SetActive(false);
+        hearttxt.gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -157,6 +186,9 @@ public class PlayerMovement : MonoBehaviour
             if(ScoreScript.cheese >=5)
             {
                 winText.gameObject.SetActive(true);
+                winScene.gameObject.SetActive(true);
+                Time.timeScale = 0;
+                gameover();
             }
         }
     }
